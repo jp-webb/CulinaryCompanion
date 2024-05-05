@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Culinary Companion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #header {
+            text-align: center;
+            padding: 20px;
+            background-color: #f2f2f2;
+        }
+        #tabs {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .tab {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .tab.active {
+            background-color: #45a049;
+        }
+        #inventory {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px; /* Adjust the gap between widgets */
+        }
+        .food-widget {
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            padding: 10px;
+            overflow: hidden;
+            flex: 1 0 200px; /* Set the width of each widget */
+        }
+        .food-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 5px;
+        }
+        .food-details {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h1>Culinary Companion</h1>
+        <p id="last-updated-label">Last updated inventory: <span id="last-updated-time"></span></p>
+    
+    </div>
+    <div id="tabs">
+        <div class="tab" onclick="showInventory()">Inventory</div>
+        <div class="tab" onclick="executeCode()">Show Recipes!</div>
+    </div>
+    <div id="inventory" style="display: none;">
+        <!-- Food widgets will be populated here -->
+    </div>
+    <div id="execute-button" style="display:none;">
+        <!-- Execute code button content -->
+    </div>
+    <div id="result" >
+        <!-- Execute code button content -->
+    </div>
+
+    <script>
+        function showInventory() {
+            fetch('/foods')
+                .then(response => response.json())
+                .then(data => {
+                    const foodContainer = document.getElementById('inventory');
+                    foodContainer.innerHTML = ''; // Clear previous data
+                    // Loop through the food items and create widgets
+                    for (const [food, quantity] of Object.entries(data)) {
+                        const foodWidget = document.createElement('div');
+                        foodWidget.classList.add('food-widget');
+
+                        const foodHeader = document.createElement('div');
+                        foodHeader.classList.add('food-header');
+                        foodHeader.textContent = food;
+                        foodWidget.appendChild(foodHeader);
+
+                        const foodDetails = document.createElement('div');
+                        foodDetails.classList.add('food-details');
+                        foodDetails.textContent = `Quantity: ${quantity}`;
+                        foodWidget.appendChild(foodDetails);
+
+                        foodContainer.appendChild(foodWidget);
+                    }
+                    const now = new Date();
+                    const lastUpdatedTime = now.toLocaleString();
+                    document.getElementById('last-updated-time').textContent = lastUpdatedTime;
+                
+                })
+                .catch(error => console.error('Error fetching food items:', error));
+            document.getElementById('inventory').style.display = 'flex';
+            document.getElementById('execute-button').style.display = 'none';
+            document.getElementById('result').style.display = 'none';
+
+        }
+
+        function executeCode() {
+            document.getElementById('inventory').style.display = 'none';
+            document.getElementById('execute-button').style.display = 'block';
+            document.getElementById('result').style.display = 'block';
+
+
+            fetch('/execute', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    // Convert the JSON data back to a JavaScript object
+                    const df = JSON.parse(data);
+                    // Render the DataFrame in a table
+                    renderDataFrame(df);
+                })
+                .catch(error => console.error('Error executing code:', error));
+        
+        }
+
+
+        function renderDataFrame(df) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Clear previous data
+
+            // Create a table element
+            const table = document.createElement('table');
+            // Add header row
+            const headerRow = table.insertRow();
+            for (const key in df[0]) {
+                if (df[0].hasOwnProperty(key)) {
+                    const th = document.createElement('th');
+                    th.textContent = key;
+                    headerRow.appendChild(th);
+                }
+            }
+            // Add data rows
+            df.forEach(rowData => {
+                const row = table.insertRow();
+                for (const key in rowData) {
+                    if (rowData.hasOwnProperty(key)) {
+                        const cell = row.insertCell();
+                        cell.textContent = rowData[key];
+                    }
+                }
+            });
+            resultDiv.appendChild(table);
+        }
+    </script>
+</body>
+</html>
