@@ -14,7 +14,7 @@ Our fridge assistant integrates with a Flask application, allowing the user to b
 
 ## Installation
 Set up your Raspberry Pi with the SenseHat and PiCamera sensor. Mount the device on the top-center of your fridge interior. Position the camera to face downwards to best capture insert/removal transitions as shown in the figure below:
-![Concept Figure](Figures/concept_figure.png)
+![Concept Figure](concept_figure.png)
 
 ## Usage
 1. Clone the CulinaryCompanion repository onto your local machine.
