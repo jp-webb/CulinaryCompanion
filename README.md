@@ -29,8 +29,8 @@ Set up your Raspberry Pi with the SenseHat and PiCamera sensor. Mount the device
 1. Clone the CulinaryCompanion repository onto your local machine.
 2. Download the 'RAW_recipes.CSV' dataset from Food.com linked below and add it to a new 'Datasets' folder at the same level as the 'Server' folder.
 3. Copy the *client.py* file under the 'Client' folder onto your Raspberry Pi device. Change the ip_addr variable in this file to match the server's IP.
-4. Run *server.py* under the 'Server' folder. Make sure to modify any filepaths to match your local directory structure.
-5. From the server side, run ```python -m flask run``` to start the Flask application. Open up the localhost in your browser.
+4. Run *server.py* from the root directory of the repository using ```python Server/server.py```. Make sure to modify any filepaths to match your local directory structure.
+5. From the server side, run ```python -m flask run``` to start the Flask application from the root directory of the repository. If needed, set the FLASK_APP environment variable to the path of your Flask application using `export FLASK_APP=Server/app.py` or the similar command for your system. Open up the localhost in your browser.
 6. Run *client.py* from your Pi device. 
 7. Once your Pi is mounted in your fridge, press your joystick "up" or "down" as you insert/remove items to update your inventory database.
 8. Explore relevant recipe suggestions in our Flask app!
