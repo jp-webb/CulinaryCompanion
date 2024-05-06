@@ -18,7 +18,7 @@ from sklearn.metrics import classification_report
 print("TensorFlow version:", tf.__version__)
 
 # Load saved model and history
-model_version = 'Models/MobileNetv2_1.h5'
+model_version = "Models/MobileNetv2_1.h5"
 print(f"Loading {model_version} model and history...")
 model = load_model(model_version)
 print("Loaded model.")

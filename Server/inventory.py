@@ -3,6 +3,14 @@ import json
 INVENTORY_DB = 'Server/inventory.json'
 
 def update_inventory(item_name, inserted, filename=INVENTORY_DB):
+    """
+    Update the inventory JSON file with item_name
+
+    Parameters:
+        item_name (str): The name of the item to update in the inventory.
+        inserted (bool): Indicates whether the item is inserted or removed.
+        filename (str): Name of the JSON file to write to.
+    """
     item_dict = {}
     item_dict['name'] = item_name
     if inserted:
